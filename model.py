@@ -48,10 +48,7 @@ class SimpleUNet(nn.Module):
             x = self.ups[i](x)
             skip = skip_connections[i//2]
             
-            # If dimensions don't match exactly after pooling
-            if x.shape != skip.shape:
-                x = torch.nn.functional.interpolate(x, size=skip.shape[2:])
-                
+            # Removed interpolation safety net - we trust the exact 352x160 dimensions!
             concat_skip = torch.cat((skip, x), dim=1)
             x = self.ups[i+1](concat_skip)
 

@@ -129,4 +129,4 @@ python predict.py
 
 One such example is as follows: 
 
-![[Pasted image 20260503162147.png]]
+![[Figure_1.png]]

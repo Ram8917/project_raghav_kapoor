@@ -56,6 +56,7 @@ def validate_epoch(model, dataloader, loss_fn, device):
     avg_loss = val_loss_sum / len(dataloader)
     avg_miou = val_miou_sum / len(dataloader)
     return avg_loss, avg_miou
+
 def train_model(model, num_epochs, train_loader, loss_fn, optimizer, val_loader=None, scheduler=None):
     """The master training loop with auto-saving checkpoints."""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -94,7 +95,7 @@ def train_model(model, num_epochs, train_loader, loss_fn, optimizer, val_loader=
             
     print("Training loop finished.")
     
-    # Save checkpoints
+    # Save final checkpoints
     os.makedirs("_checkpoints", exist_ok=True)
     torch.save(model.state_dict(), "_checkpoints/final_weights.pth")
     print("Training complete. Weights saved.")
@@ -107,23 +108,28 @@ if __name__ == "__main__":
     from dataset import get_dataloader
     from config import number_of_epochs, learning_rate
     
-    # 1. Path Setup (Update these to match your local folders)
-    LWA_DIR = "./LWA_Corrected"
-    LBL_DIR = "./Training_Labels_Global"
+    # 1. Path Setup (Explicit 4-Folder Structure)
+    TRAIN_LWA_DIR = "./data/Training_Dataset/LWA"
+    TRAIN_LBL_DIR = "./data/Training_Dataset/Temperature"
+    VAL_LWA_DIR = "./data/Validation_Dataset/LWA"
+    VAL_LBL_DIR = "./data/Validation_Dataset/Temperature"
     
-    # Grab all .png or .npy files
-    lwa_files = sorted(glob.glob(os.path.join(LWA_DIR, "*.*")))
-    lbl_files = sorted(glob.glob(os.path.join(LBL_DIR, "*.*")))
+    # Grab all .png files
+    train_lwa_files = sorted(glob.glob(os.path.join(TRAIN_LWA_DIR, "*.*")))
+    train_lbl_files = sorted(glob.glob(os.path.join(TRAIN_LBL_DIR, "*.*")))
     
-    # Ensure lists aren't empty before trying to split
-    if not lwa_files or not lbl_files:
-        print("❌ Error: Could not find data files. Check your LWA_DIR and LBL_DIR paths.")
+    val_lwa_files = sorted(glob.glob(os.path.join(VAL_LWA_DIR, "*.*")))
+    val_lbl_files = sorted(glob.glob(os.path.join(VAL_LBL_DIR, "*.*")))
+    
+    # Ensure lists aren't empty
+    if not train_lwa_files or not val_lwa_files:
+        print("❌ Error: Could not find data files. Check your directory names.")
     else:
-        # 2. Data Splitting (80% Train, 20% Val)
-        split_idx = int(0.8 * len(lwa_files))
+        # 2. Load directly into DataLoaders (No splitting required!)
+        train_loader = get_dataloader(train_lwa_files, train_lbl_files, is_train=True)
+        val_loader = get_dataloader(val_lwa_files, val_lbl_files, is_train=False)
         
-        train_loader = get_dataloader(lwa_files[:split_idx], lbl_files[:split_idx], is_train=True)
-        val_loader = get_dataloader(lwa_files[split_idx:], lbl_files[split_idx:], is_train=False)
+        print(f"✅ Loaded {len(train_lwa_files)} training images and {len(val_lwa_files)} validation images.")
         
         # 3. Model & Device Setup
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

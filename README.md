@@ -24,8 +24,13 @@ project_raghav_kapoor/
 │   ├── best_weights.pth   # Checkpoint with highest validation mIoU
 │
 ├── data/                  # Directory containing the dataset
-│   ├── Input_LWA/         # 1-Channel 8-bit PNG LWA inputs (352x160)
-│   └── Training_Labels/   # 1-Channel PNG integer masks (Classes 0-5)
+    ├── Training_Dataset/  # Directory containing training data
+    │   ├── LWA/            # 1-Channel 8-bit PNG LWA inputs (352x160)
+    │   └── Temperature/    # 1-Channel PNG integer masks (Classes 0-5)
+    │
+    ├── Validation_Dataset/ # Directory containing unseen validation data
+    │   ├── LWA/            # 1-Channel 8-bit PNG LWA inputs (352x160)
+    │   └── Temperature/    # 1-Channel PNG integer masks (Classes 0-5)
 │
 ├── config.py              # Hyperparameters and spatial dimensions
 ├── dataset.py             # PyTorch Dataset and DataLoader logic

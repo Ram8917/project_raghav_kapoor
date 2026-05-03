@@ -129,4 +129,5 @@ python predict.py
 
 One such example is as follows: 
 
-![[Figure_1.png]]
+<img width="909" height="472" alt="image" src="https://github.com/user-attachments/assets/64e96796-0a23-40c7-b883-17ad25f62eda" />
+

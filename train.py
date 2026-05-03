@@ -136,4 +136,6 @@ if __name__ == "__main__":
         
         # 5. Execute Training
         print(f"🚀 Starting Local Training on {device}...")
+        total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"📊 Total trainable parameters in SimpleUNet: {total_params:,}")
         train_model(model, number_of_epochs, train_loader, loss_fn, optimizer, val_loader, scheduler)

@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 class SimpleUNet(nn.Module):
-    def __init__(self, in_channels=1, out_classes=6, features=[32, 64, 128]):
+    def __init__(self, in_channels=1, out_classes=6, features=[16, 32, 64]):
         super(SimpleUNet, self).__init__()
         self.ups = nn.ModuleList()
         self.downs = nn.ModuleList()

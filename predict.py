@@ -20,6 +20,7 @@ def predict_temperature_classes(list_of_img_paths):
     """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
+    # REMINDER: Add features=[...] here if you trained a smaller model!
     model = SimpleUNet(in_channels=1, out_classes=6)
     
     # Safely load weights whether on GPU or CPU
@@ -52,25 +53,21 @@ def calculate_single_miou(pred, target, num_classes=6):
     return np.mean(ious) if ious else 0
 
 def test_unseen_validation_data():
-    """Automatically finds the 20% unseen data, picks a day, and tests it."""
-    print("🔍 Searching for local data to run a reproducibility test...")
+    """Automatically finds the unseen validation data, picks a day, and tests it."""
+    print("🔍 Searching for local validation data to run a reproducibility test...")
     
-    # EXACT FOLDER PATHS FOR YOUR REPOSITORY
-    LWA_DIR = "./LWA_Corrected"
-    LBL_DIR = "./Training_Labels_Global"
+    # EXACT FOLDER PATHS FOR YOUR NEW VALIDATION STRUCTURE
+    VAL_LWA_DIR = "./data/Validation_Dataset/LWA"
+    VAL_LBL_DIR = "./data/Validation_Dataset/Temperature"
     
-    lwa_files = sorted(glob.glob(os.path.join(LWA_DIR, "*.*")))
-    lbl_files = sorted(glob.glob(os.path.join(LBL_DIR, "*.*")))
+    # Load directly from the explicit validation folders
+    val_lwa_files = sorted(glob.glob(os.path.join(VAL_LWA_DIR, "*.*")))
+    val_lbl_files = sorted(glob.glob(os.path.join(VAL_LBL_DIR, "*.*")))
     
-    if not lwa_files or not lbl_files:
-        print(f"❌ Error: Could not find data in {LWA_DIR} or {LBL_DIR}. Skipping local test.")
+    if not val_lwa_files or not val_lbl_files:
+        print(f"❌ Error: Could not find data in {VAL_LWA_DIR} or {VAL_LBL_DIR}. Skipping local test.")
         return
 
-    # Recreate the exact 80/20 split so we only test UNSEEN data
-    split_idx = int(0.8 * len(lwa_files))
-    val_lwa_files = lwa_files[split_idx:]
-    val_lbl_files = lbl_files[split_idx:]
-    
     print(f"✅ Found {len(val_lwa_files)} unseen validation images.")
     
     # Pick one random unseen day

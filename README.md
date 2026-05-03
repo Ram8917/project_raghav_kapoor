@@ -8,14 +8,14 @@
 
 ---
 
-## 🌍 Project Overview
+##  Project Overview
 This project investigates the structural relationship between mid-latitude atmospheric dynamics and surface temperature distributions. Using a custom Convolutional Neural Network (CNN), it performs semantic segmentation to map **Local Wave Activity (LWA)**—a diagnostic metric of jet stream meandering—to discrete **Surface Temperature Regimes** at higher levels of the atmosphere.
 
 The model is trained to recognize the fuzzy spatial structures of atmospheric waves and classify each pixel into one of 6 temperature categories, demonstrating physical teleconnections between upper-level wave dynamics and regional weather.
 
 ---
 
-## 📂 Directory Structure
+##  Directory Structure
 The repository strictly follows the required grading nomenclature:
 ```text
 project_raghav_kapoor/
@@ -73,7 +73,7 @@ The project utilizes a custom **SimpleUNet**, designed specifically for lightwei
 
 ---
 
-## 🚀 How to Run the Code
+##  How to Run the Code
 
 ### For Automated Grading (`interface.py`)
 
